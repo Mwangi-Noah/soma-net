@@ -10,14 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_10_045228) do
-
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+ActiveRecord::Schema.define(version: 2023_07_10_052240) do
 
   create_table "book_clubs", force: :cascade do |t|
     t.string "name"
-    t.bigint "creator_id"
+    t.integer "creator_id"
     t.string "book_title"
     t.integer "discussion_duration"
     t.datetime "created_at", precision: 6, null: false
@@ -34,8 +31,8 @@ ActiveRecord::Schema.define(version: 2023_07_10_045228) do
   end
 
   create_table "club_memberships", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "book_club_id", null: false
+    t.integer "user_id", null: false
+    t.integer "book_club_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["book_club_id"], name: "index_club_memberships_on_book_club_id"
@@ -43,9 +40,9 @@ ActiveRecord::Schema.define(version: 2023_07_10_045228) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "book_club_id", null: false
-    t.bigint "discussion_question_id", null: false
+    t.integer "user_id", null: false
+    t.integer "book_club_id", null: false
+    t.integer "discussion_question_id", null: false
     t.text "comment_text"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -55,8 +52,8 @@ ActiveRecord::Schema.define(version: 2023_07_10_045228) do
   end
 
   create_table "discussion_questions", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "book_club_id", null: false
+    t.integer "user_id", null: false
+    t.integer "book_club_id", null: false
     t.text "question"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -65,7 +62,7 @@ ActiveRecord::Schema.define(version: 2023_07_10_045228) do
   end
 
   create_table "notifications", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.integer "user_id", null: false
     t.text "message"
     t.datetime "timestamp"
     t.datetime "created_at", precision: 6, null: false
@@ -74,8 +71,8 @@ ActiveRecord::Schema.define(version: 2023_07_10_045228) do
   end
 
   create_table "reading_goals", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "book_club_id", null: false
+    t.integer "user_id", null: false
+    t.integer "book_club_id", null: false
     t.integer "target_pages"
     t.date "deadline"
     t.datetime "created_at", precision: 6, null: false
@@ -85,8 +82,8 @@ ActiveRecord::Schema.define(version: 2023_07_10_045228) do
   end
 
   create_table "reviews", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "book_id", null: false
+    t.integer "user_id", null: false
+    t.integer "book_id", null: false
     t.integer "rating"
     t.text "review_text"
     t.datetime "created_at", precision: 6, null: false
@@ -105,6 +102,12 @@ ActiveRecord::Schema.define(version: 2023_07_10_045228) do
     t.string "email"
     t.string "password"
     t.string "location"
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "book_clubs", "users", column: "creator_id"
