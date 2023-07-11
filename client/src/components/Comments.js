@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Reactions from '../Reactions';
 import api from '../../api.js';
 
-const Comment = (props) => {
+const Comments = (props) => {
   const [upvotes, setUpvotes] = useState(props.upvotes);
   const [status, setStatus] = useState(props.status);
   const [showChildren, setShowChildren] = useState(false);
@@ -84,4 +84,4 @@ const Comment = (props) => {
   );
 };
 
-export default Comment;
+export default Comments;

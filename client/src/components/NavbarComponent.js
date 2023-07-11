@@ -1,7 +1,6 @@
 import React from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
-import Cookies from 'js-cookie';
 import api from '../../api.js';
 import { useHistory } from 'react-router-dom';
 
@@ -9,10 +8,13 @@ const NavbarComponent = () => {
   const history = useHistory();
 
   async function logoutUser() {
-    Cookies.remove('username');
     await api.logout();
     history.push('/login'); // Redirect to the login page after logout
   }
+
+  const username = document.cookie.split('; ')
+    .find(row => row.startsWith('username='))
+    ?.split('=')[1];
 
   return (
     <Navbar bg="light" expand="lg">
@@ -23,9 +25,9 @@ const NavbarComponent = () => {
           <Nav.Link href="/">Home</Nav.Link>
           {/* Add more navigation links as needed */}
         </Nav>
-        {Cookies.get('username') ? (
+        {username ? (
           <React.Fragment>
-            <Navbar.Text>{Cookies.get('username')}</Navbar.Text>
+            <Navbar.Text>{username}</Navbar.Text>
             <Nav.Link onClick={logoutUser}>Log Out</Nav.Link>
           </React.Fragment>
         ) : (

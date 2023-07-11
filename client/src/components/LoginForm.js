@@ -4,7 +4,7 @@ import { Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import api from '../../api.js';
 
-const LoginPage = () => {
+const LoginForm = () => {
   const history = useHistory();
   const [error, setError] = useState('');
 
@@ -55,4 +55,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default LoginForm;
