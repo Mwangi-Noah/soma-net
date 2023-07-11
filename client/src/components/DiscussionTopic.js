@@ -22,7 +22,7 @@ const DiscussionTopic = () => {
 
   const handleSelectBook = (book) => {
     setSelectedBook(book);
-    // You can perform any other necessary actions when a book is selected, such as setting it as the topic of discussion or navigating to the discussion page.
+    // Perform any other necessary actions when a book is selected, such as setting it as the topic of discussion or navigating to the discussion page.
   };
 
   return (

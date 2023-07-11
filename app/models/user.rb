@@ -10,8 +10,12 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
         has_many :club_memberships
         has_many :book_clubs, through: :club_memberships
+  
+        has_many :posts
+        has_many :comments
+        has_many :reactions
       
-        validates :name, presence: true
+        validates :username, presence: true
         validates :email, presence: true, uniqueness: true
         validates :password, presence: true
       

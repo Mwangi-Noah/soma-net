@@ -1,7 +1,6 @@
 class Comment < ApplicationRecord
   belongs_to :user
-  belongs_to :book_club
-  belongs_to :discussion_question
+  belongs_to :post
 
-  validates :comment_text, presence: true
+  validates :body, presence: true
 end
