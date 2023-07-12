@@ -1,32 +1,106 @@
-import React, { useState } from 'react';
-import Post from '../Post';
-import NavbarComponent from '../Navbar';
+import React, { useState, useEffect } from 'react';
+import SinglePost from './SinglePost';
+import NavbarComponent from './NavbarComponent';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from 'react-router-dom';
-import usePostsNumberFetch from '../../Hooks/usePostsNumberFetch.js';
-import usePostsPaginationFetch from '../../Hooks/usePostsPaginationFetch.js';
-import BookPaginationBar from '../BookPagination';
-import PostMenu from '../PostMenu';
+import BookPaginationBar from './BookPaginationBar';
+import PostMenu from './PostMenu';
 import './styles.css';
-import useReactionsFetch from '../../Hooks/useReactionsFetch.js';
-import Dashboard from '../Dashboard';
+import Dashboard from './Dashboard';
 import Cookies from 'js-cookie';
-import Popup from '../Popup';
-import Notifications from '../Notifications';
+import Popup from './Popup';
+import Notifications from './Notifications';
 
 const App = () => {
   const [popup, setPopup] = useState({});
   const username = Cookies.get('username');
-  const { reactions, loading } = useReactionsFetch(username, setPopup);
+
+  const usePostsNumberFetch = (setPopup) => {
+    const [number, setNumber] = useState(0);
+
+    useEffect(() => {
+      // Fetch the number of posts from the server
+      // Replace with your actual API call or data fetching logic
+      const fetchPostsNumber = async () => {
+        try {
+          const response = await fetch('/api/posts/number');
+          const data = await response.json();
+          setNumber(data.number);
+        } catch (error) {
+          setPopup({ message: 'Error fetching posts number' });
+        }
+      };
+
+      fetchPostsNumber();
+    }, [setPopup]);
+
+    return number;
+  };
+
+  const usePostsPaginationFetch = (currentPage, postsPerPage, filterOptions, setPopup) => {
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      // Fetch the paginated posts from the server
+      // Replace with your actual API call or data fetching logic
+      const fetchPaginatedPosts = async () => {
+        try {
+          setLoading(true);
+          const response = await fetch(
+            `/api/posts?page=${currentPage}&limit=${postsPerPage}&filter=${JSON.stringify(filterOptions)}`
+          );
+          const data = await response.json();
+          setPosts(data.posts);
+          setLoading(false);
+        } catch (error) {
+          setPopup({ message: 'Error fetching paginated posts' });
+          setLoading(false);
+        }
+      };
+
+      fetchPaginatedPosts();
+    }, [currentPage, postsPerPage, filterOptions, setPopup]);
+
+    return { posts, loading };
+  };
+
+  const useReactionsFetch = (username, setPopup) => {
+    const [reactions, setReactions] = useState({});
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      // Fetch the reactions for the user from the server
+      // Replace with your actual API call or data fetching logic
+      const fetchReactions = async () => {
+        try {
+          setLoading(true);
+          const response = await fetch(`/api/reactions?username=${username}`);
+          const data = await response.json();
+          setReactions(data.reactions);
+          setLoading(false);
+        } catch (error) {
+          setPopup({ message: 'Error fetching reactions' });
+          setLoading(false);
+        }
+      };
+
+      fetchReactions();
+    }, [username, setPopup]);
+
+    return { reactions, loading };
+  };
+
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOptions, setFilterOptions] = useState({});
-  const totalPosts = usePostsNumberFetch(setPopup).result;
-  const posts = usePostsPaginationFetch(
+  const totalPosts = usePostsNumberFetch(setPopup);
+  const { posts, loading } = usePostsPaginationFetch(
     currentPage,
     20, // Set the number of posts per page to 20
     filterOptions,
     setPopup
   );
+  const { reactions } = useReactionsFetch(username, setPopup);
 
   return (
     <div>
@@ -40,29 +114,10 @@ const App = () => {
             filterOptions={filterOptions}
           />
           {posts && !loading ? (
-            posts.map((post, idx) => {
-              let status;
-              if (
-                reactions.downvotes &&
-                Object.prototype.hasOwnProperty.call(
-                  reactions.downvotes,
-                  post._id
-                )
-              ) {
-                status = -1;
-              } else if (
-                reactions.upvotes &&
-                Object.prototype.hasOwnProperty.call(
-                  reactions.upvotes,
-                  post._id
-                )
-              ) {
-                status = 1;
-              } else {
-                status = 0;
-              }
+            posts.map((post) => {
+              const status = reactions[post._id] || 0;
               return (
-                <Post
+                <SinglePost
                   key={post._id}
                   id={post._id}
                   title={post.title}
@@ -75,7 +130,7 @@ const App = () => {
               );
             })
           ) : (
-            <p>loading</p>
+            <p>Loading...</p>
           )}
         </div>
         <div className='col-3 d-flex flex-column align-items-center'>
@@ -86,7 +141,7 @@ const App = () => {
             Create a Post
           </Link>
           {totalPosts && (
-            <PaginationBar
+            <BookPaginationBar
               currentPage={currentPage}
               setPage={setCurrentPage}
               totalPosts={totalPosts}
