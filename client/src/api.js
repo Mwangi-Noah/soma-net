@@ -44,7 +44,7 @@ function handleResponse(response) {
 // Functions to make API calls
 const api = {
   sendPostSubmitRequest: async (body) => {
-    const response = await fetch('/api/v1/posts', {
+    const response = await fetch('/api/posts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ const api = {
     return handleResponse(response);
   },
   sendPostsRequest: async () => {
-    const response = await fetch('/api/v1/posts');
+    const response = await fetch('/api/posts');
     return handleResponse(response);
   },
   sendPostsPageRequest: async (currentPage, postsPerPage, filterOptions) => {
@@ -63,49 +63,49 @@ const api = {
       number: postsPerPage,
       ...filterOptions,
     });
-    const response = await fetch(`/api/v1/posts?${searchParams.toString()}`);
+    const response = await fetch(`/api/posts?${searchParams.toString()}`);
     return handleResponse(response);
   },
   sendPostCommentsRequest: async (parent, returnWithComments) => {
     const response = await fetch(
-      `/api/v1/posts?parent=${parent}&returnWithComments=${returnWithComments}`
+      `/api/posts?parent=${parent}&returnWithComments=${returnWithComments}`
     );
     return handleResponse(response);
   },
   sendSinglePostRequest: async (id) => {
-    const response = await fetch(`/api/v1/posts/${id}`);
+    const response = await fetch(`/api/posts/${id}`);
     return handleResponse(response);
   },
   sendPostNumberRequest: async () => {
-    const response = await fetch('/api/v1/posts-number');
+    const response = await fetch('/api/posts-number');
     return handleResponse(response);
   },
   sendUpvotePostRequest: async (id) => {
-    const response = await fetch(`/api/v1/posts/${id}/upvote`, {
+    const response = await fetch(`/api/posts/${id}/upvote`, {
       method: 'POST',
     });
     return handleResponse(response);
   },
   sendDownvotePostRequest: async (id) => {
-    const response = await fetch(`/api/v1/posts/${id}/downvote`, {
+    const response = await fetch(`/api/posts/${id}/downvote`, {
       method: 'POST',
     });
     return handleResponse(response);
   },
   sendRemovePostReactionsRequest: async (id) => {
-    const response = await fetch(`/api/v1/posts/${id}/remove-reactions`, {
+    const response = await fetch(`/api/posts/${id}/remove-reactions`, {
       method: 'POST',
     });
     return handleResponse(response);
   },
   logout: async () => {
-    const response = await fetch('/api/v1/logout', {
+    const response = await fetch('/api/logout', {
       method: 'DELETE',
     });
     return handleResponse(response);
   },
   signup: async (body) => {
-    const response = await fetch('/api/v1/users', {
+    const response = await fetch('/api/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ const api = {
     return handleResponse(response);
   },
   login: async (body) => {
-    const response = await fetch('/api/v1/login', {
+    const response = await fetch('/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -125,15 +125,15 @@ const api = {
     return handleResponse(response);
   },
   sendReactionsRequest: async (username) => {
-    const response = await fetch(`/api/v1/users/${username}/reactions`);
+    const response = await fetch(`/api/users/${username}/reactions`);
     return handleResponse(response);
   },
   sendUserDataRequest: async (username) => {
-    const response = await fetch(`/api/v1/users/${username}`);
+    const response = await fetch(`/api/users/${username}`);
     return handleResponse(response);
   },
   sendChangeIconRequest: async (data, username) => {
-    const response = await fetch(`/api/v1/users/${username}/icon`, {
+    const response = await fetch(`/api/users/${username}/icon`, {
       method: 'POST',
       body: data,
     });

@@ -1,6 +1,7 @@
 class Api::SessionsController < Devise::SessionsController
     skip_before_action :verify_authenticity_token
   
+    # POST /api/login
     def create
       user = User.find_by(email: params[:user][:email])
       if user&.valid_password?(params[:user][:password])
@@ -11,6 +12,7 @@ class Api::SessionsController < Devise::SessionsController
       end
     end
   
+    # DELETE /api/logout
     def destroy
       sign_out(current_user)
       render json: { message: 'Logged out successfully.' }

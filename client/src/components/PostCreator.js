@@ -16,7 +16,7 @@ const PostCreator = ({ parentId, onNewComment }) => {
     const body = formData.get('body');
 
     try {
-      const res = await api.createComment(parentId, body); // Replace with your API function to create a comment
+      const res = await api.createComment(parentId, body); // Replace with API function to create a comment
       if (res.status === 200) {
         const newComment = res.data;
         onNewComment(newComment); // Notify parent component about the new comment

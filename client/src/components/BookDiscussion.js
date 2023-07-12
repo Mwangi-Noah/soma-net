@@ -47,7 +47,7 @@ const BookDiscussion = () => {
       ))}
 
       {/* Render a component to create new comments */}
-      {/* For example, you can use the PostCreator component */}
+      {/* Use the PostCreator component */}
       <PostCreator
         parentId={bookId}
         onNewComment={handleNewComment}
